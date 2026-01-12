@@ -1,24 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-<!--
-        <template id="listing">
-          <ul>
-            <li t-foreach="objects" t-as="object">
-              <a t-attf-href="#{ root }/objects/#{ object.id }">
-                <t t-esc="object.display_name"/>
-              </a>
-            </li>
-          </ul>
-        </template>
-        <template id="object">
-          <h1><t t-esc="object.display_name"/></h1>
-          <dl>
-            <t t-foreach="object._fields" t-as="field">
-              <dt><t t-esc="field"/></dt>
-              <dd><t t-esc="object[field]"/></dd>
-            </t>
-          </dl>
-        </template>
--->
-    </data>
+    <!-- Employee Form View Extension -->
+    <record id="view_employee_form_inherit_birthday_wish" model="ir.ui.view">
+        <field name="name">hr.employee.form.birthday.wish</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Add button to button box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_birthday_wishes" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-birthday-cake">
+                    <field name="birthday_wish_count" widget="statinfo" string="Birthday Wishes"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
 </odoo>

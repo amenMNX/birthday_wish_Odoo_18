@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_birthday_wish_birthday_wish,birthday_wish.birthday_wish,model_birthday_wish_birthday_wish,base.group_user,1,1,1,1
+access_birthday_wish_user,Birthday Wish User,model_birthday_wish,base.group_user,1,1,1,1
+access_birthday_wish_manager,Birthday Wish Manager,model_birthday_wish,hr.group_hr_manager,1,1,1,1

@@ -1,17 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data>
-    <!-- explicit list view definition -->
-
-    <record id="view_partner_form_extension" model="ir.ui.view">
-            <field name="name">res.partner.form</field>
-            <field name="model">res.partner</field>
-            <field name="priority" eval="1"/>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-              <xpath expr="//field[@name='function']" position="after">
-                    <field name="dob" attrs="{'invisible': [('is_company','=', True)]}"/>
-                </xpath>
-            </field>
+    <!-- Tree View -->
+    <record id="view_birthday_wish_tree" model="ir.ui.view">
+        <field name="name">birthday.wish.tree</field>
+        <field name="model">birthday.wish</field>
+        <field name="arch" type="xml">
+            <tree string="Birthday Wishes" create="false">
+                <field name="employee_id"/>
+                <field name="email"/>
+                <field name="birthday_date"/>
+                <field name="wish_sent" widget="boolean_toggle"/>
+                <field name="sent_date"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
     </record>
-  </data>
+
+    <!-- Form View -->
+    <record id="view_birthday_wish_form" model="ir.ui.view">
+        <field name="name">birthday.wish.form</field>
+        <field name="model">birthday.wish</field>
+        <field name="arch" type="xml">
+            <form string="Birthday Wish" create="false">
+                <header>
+                    <button name="send_birthday_wish" 
+                            type="object" 
+                            string="Send Wish" 
+                            class="btn-primary" 
+                            invisible="wish_sent"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-archive">
+                            <field name="active" widget="boolean_button" 
+                                   options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group string="Employee Information">
+                            <field name="employee_id"/>
+                            <field name="email"/>
+                            <field name="birthday_date"/>
+                        </group>
+                        <group string="Wish Status">
+                            <field name="wish_sent"/>
+                            <field name="sent_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_birthday_wish_search" model="ir.ui.view">
+        <field name="name">birthday.wish.search</field>
+        <field name="model">birthday.wish</field>
+        <field name="arch" type="xml">
+            <search string="Birthday Wishes">
+                <field name="employee_id"/>
+                <field name="email"/>
+                <filter string="Sent" name="sent" domain="[('wish_sent', '=', True)]"/>
+                <filter string="Not Sent" name="not_sent" domain="[('wish_sent', '=', False)]"/>
+                <separator/>
+                <filter string="This Year" name="this_year" 
+                        domain="[('sent_date', '&gt;=', (context_today() - relativedelta(years=1)).strftime('%Y-01-01'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Sent Date" name="group_sent_date" context="{'group_by': 'sent_date'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_birthday_wish" model="ir.actions.act_window">
+        <field name="name">Birthday Wishes</field>
+        <field name="res_model">birthday.wish</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_this_year': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No birthday wishes found
+            </p>
+            <p>
+                Birthday wishes are automatically created and sent when employees have their birthdays.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_birthday_wish_root" 
+              name="Birthday Wishes" 
+              sequence="90" 
+              groups="hr.group_hr_user"/>
+    
+    <menuitem id="menu_birthday_wish" 
+              name="All Wishes" 
+              parent="menu_birthday_wish_root" 
+              action="action_birthday_wish" 
+              sequence="10"/>
 </odoo>
