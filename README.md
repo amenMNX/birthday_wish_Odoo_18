@@ -14,6 +14,8 @@ Le module permet de suivre les prochains anniversaires, de synchroniser automati
 
 Il offre également des outils de configuration et de sécurité permettant de contrôler l'affichage de l'âge des employés.
 
+<img width="6240" height="5127" alt="diagram (2)" src="https://github.com/user-attachments/assets/80b50dd9-bf9c-439a-bb91-33d97a2e2e62" />
+
 ---
 
 ## ✨ Fonctionnalités principales
